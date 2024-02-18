@@ -3,25 +3,28 @@ import { SmallCard } from "../components/SmallCard"
 const cards = [
     {
         name: 'logo2',
-        label: 'Активується одним натисканням'
+        label: 'labelLogo'
     },
     {
         name: 'sizes',
-        label: 'Підходить до будь-яких бутилів'
+        label: 'labelSizes'
     },
     {
         name: 'battery',
-        label: 'Ефективний акумулятор'
+        label: 'labelBattery'
     }
 ]
 
-export const HorizontalCardsSection = () => {
+export const HorizontalCardsSection = ({
+    l=() => {}
+}) => {
+
     return (
-        <section className="grid grid-cols-3 gap-6 mx-auto max-w-[1600px]">
+        <section className="grid grid-cols-3 md:flex md:flex-col gap-6 mx-auto max-w-[1600px]">
             {cards.map(({label, name}) => (
                 <SmallCard
                     key={`head-card-${name}`}
-                    label={label}
+                    label={l(label)}
                     name={name}
                 />
             ))}

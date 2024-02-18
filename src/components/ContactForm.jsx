@@ -1,19 +1,16 @@
+import { toast } from "react-toastify";
 import joinClassNames from "../helpers/joinClassNames";
 import useField from "../hooks/useField"
 import { MailService } from "../services/MailService";
 import { Button } from "./Button";
-
-const subTitle = 'Електричний насос для дому, офісу, дачі.\n Незамінна річ на кожен день.';
-const submitLabel = 'Замовити';
-
-const requiredError = 'Поле має бути заповненим (3-50 символів).';
-
-const namePlaceholder = `Ваше ім'я`;
-const numberPlaceholder = `Ваш номер`;
+import { useState } from "react";
 
 export const ContactForm = ({
+    l=() => {},
     title=''
 }) => {
+    const [isSubmitted, updateSubmitted] = useState(false);
+
     const { 
         Field: NameField, 
         isValid: isName, 
@@ -21,7 +18,7 @@ export const ContactForm = ({
         wasFocused: focusedName
     } = useField({
         name: "name", 
-        placeholder: namePlaceholder
+        placeholder: l('namePlaceholder')
     });
     
     const { 
@@ -31,43 +28,54 @@ export const ContactForm = ({
         wasFocused: focusedNumber 
     } = useField({
         name: "number",
-        placeholder: numberPlaceholder
+        placeholder: l('numberPlaceholder')
     });
 
     const onSubmit = () => {
+        updateSubmitted(true);
+
         MailService.sendRequest({
             name,
             number
+        })
+        .then(() => {
+            toast.success(l('successMessage'));
+        })
+        .catch(() => {
+            toast.error(l('errorMessage'));
+        })
+        .finally(() => {
+            updateSubmitted(false);
         });
     }
 
     return (
-        <form className="flex flex-col gap-2 max-w-[450px]">
+        <form className="flex flex-col gap-2 max-w-[450px] md:max-w-full">
             <h3>
                 {title}
             </h3>
             <h4 className="mb-6">
-                {subTitle}
+                {l('subTitle')}
             </h4>
             {NameField}
             <div className={joinClassNames(
                 'text-red-400',
                 (!focusedName || isName) && 'hidden'
             )}>
-                {requiredError}
+                {l('requiredError')}
             </div>
             {NumberField}
             <div className={joinClassNames(
                 'text-red-400 mb-2',
                 (!focusedNumber || isNumber) && 'hidden'
             )}>
-                {requiredError}
+                {l('requiredError')}
             </div>
             <Button
-                label={submitLabel}
+                label={l('submitLabel')}
                 onClick={onSubmit}
                 type="submit"
-                disabled={!isName || !isNumber}
+                disabled={(!isName || !isNumber) || isSubmitted}
             />
         </form>
     )

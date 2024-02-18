@@ -1,4 +1,5 @@
 import React from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 import { AppLayout } from './layout/AppLayout';
 import { HeadSection } from './sections/HeadSection';
 import { HorizontalCardsSection } from './sections/HorizontalCardsSection';
@@ -7,25 +8,34 @@ import { VerticalCardsSection } from './sections/VerticalCardsSection';
 import { HowToOrderSection } from './sections/HowToOrderSection';
 import { PreFootSection } from './sections/PreFootSection';
 import { FooterSection } from './sections/FooterSection';
-
-const firstDescription = `Базово помпа може бути встановлена на бутилі: 10л, 11.3л, 15л, 18.9л`;
-const secondDescription = `Наша помпа має подвійний насос, покращений електродвигун і високу якість сбірки`;
+import { ToastContainer } from 'react-toastify';
+import { useTranslate } from './hooks/useTranslate';
+import locales from './constants/locales';
+import { HeaderSection } from './sections/HeaderSection';
 
 function App() {
+  const { l, setLocale, locale } = useTranslate({ locales })
+
   return (
     <AppLayout>
-      <HeadSection />
-      <HorizontalCardsSection />
-      <InfoLabel
-        text={firstDescription}
+      <HeaderSection
+        setLocale={setLocale}
+        locale={locale}
       />
-      <VerticalCardsSection />
+      <HeadSection l={l} />
+      <HorizontalCardsSection l={l} />
       <InfoLabel
-        text={secondDescription}
+        text={l('firstDescription')}
       />
-      <HowToOrderSection />
-      <PreFootSection />
-      <FooterSection />
+      <VerticalCardsSection l={l} />
+      <InfoLabel
+        text={l('secondDescription')}
+      />
+      <HowToOrderSection l={l} />
+      <PreFootSection l={l} />
+      <FooterSection l={l} />
+
+      <ToastContainer />
     </AppLayout>
   );
 }

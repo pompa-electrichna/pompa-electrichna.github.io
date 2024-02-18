@@ -9,11 +9,11 @@ export const LargeCard = ({
 }) => {
     return (
         <div className={joinClassNames(
-            'flex items-center gap-8 border-b-[1px] px-2 pb-8',
+            'flex md:flex-col items-center gap-8 border-b-[1px] px-2 pb-8',
             className
         )}>
             <Image
-                className="max-w-[400px] rounded-xl"
+                className="max-w-[400px] md:w-full rounded-xl"
                 name={name}
             />
             <div className="flex flex-col justify-center gap-4 mb-auto">
